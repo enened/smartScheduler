@@ -10,6 +10,8 @@ function MailTasker(){
     const [loading, setLoading]= useState(false);
     const [doneText, setDoneText]= useState("");
 
+
+    // choose account for scanning gmail
     useEffect(()=>{
         /* global google */
         const google = window.google
@@ -33,7 +35,7 @@ function MailTasker(){
     }, [])
 
     
-
+    // show scan email buttons
     return(
         <>
             <p>Automatically create tasks from your gmail!</p>

@@ -16,6 +16,8 @@ function Task({task, setTasks, index}){
         })
     }, [])
 
+
+    // delete task
     const deleteTask = (taskId, index, subtask)=>{
         Axios.post("http://localhost:30011/deleteTask", {taskId: taskId}).then((response)=>{
             if (subtask){
@@ -43,6 +45,7 @@ function Task({task, setTasks, index}){
         })
     }
 
+    // break task into subtasks using ChatGPT
     const breakIntoSubtasks = (task, index)=>{
         setLoading(true)
         Axios.post("http://localhost:30011/breakIntoSubtasks", {task: task}).then((response)=>{
@@ -54,6 +57,7 @@ function Task({task, setTasks, index}){
         })
     }
 
+    // get steps to finish task using ChatGPT
     const getSteps = (task)=>{
         setOpen(true)
         Axios.post("http://localhost:30011/getSteps", {task: task}).then((response)=>{
@@ -62,7 +66,7 @@ function Task({task, setTasks, index}){
     }
 
 
-    
+    // show task
     return(
         <>
             <div className='taskSlide'>

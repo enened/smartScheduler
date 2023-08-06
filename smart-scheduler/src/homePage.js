@@ -15,24 +15,14 @@ function HomePage(){
 
     
     useEffect(()=>{
-        // /* global google */
-        // const google = window.google
-
-        // setTokenClient(
-        //     google.accounts.oauth2.initTokenClient({
-        //         client_id: "166074828687-prontca2mjfsuajnmv7mp6pl6crte0v9.apps.googleusercontent.com",
-        //         scope: "https://www.googleapis.com/auth/gmail.readonly",
-        //         callback: (tokenResponse) =>{
-        //             console.log(tokenResponse)
-        //         }
-        //     })
-        // )
 
         if (!user){
             navigate("/")
         }
     }, [])
 
+
+    // show page based on user selection
     return(
         <>
             <h1>SmartScheduler</h1>

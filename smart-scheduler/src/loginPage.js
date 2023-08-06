@@ -17,6 +17,7 @@ function LoginPage(){
         })
     }
   
+    // login using google
     useEffect(()=>{
         /* global google */
         const google = window.google;
@@ -35,6 +36,7 @@ function LoginPage(){
         google.accounts.id.prompt()
     }, [])
     
+
     return(
       <>  
         <h1>Smart scheduler</h1>

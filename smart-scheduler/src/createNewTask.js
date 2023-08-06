@@ -52,7 +52,7 @@ function CreateNewTask({setOpen, setTasks, daily}){
         })
     }
 
-
+    // show create new slide fields
     return(
         <>
 

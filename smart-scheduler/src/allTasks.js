@@ -14,6 +14,7 @@ function AllTasks(){
     const [open, setOpen]= useState(false);
     const [loading, setLoading]= useState(false);
 
+    // gets all tasks
     useEffect(()=>{
         setLoading(true)
         Axios.post("http://localhost:30011/getAllTasks", {userId: user.userId}).then((response)=>{
@@ -23,7 +24,7 @@ function AllTasks(){
     }, [])
 
 
-    
+    // shows all tasks page
     return(
         <>  
 

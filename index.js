@@ -21,7 +21,7 @@ const db = mysql.createConnection({
 
 // configure chatGPT API
 const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({apiKey: "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",});
+const configuration = new Configuration({apiKey: "",});
 const openai = new OpenAIApi(configuration);
 
 

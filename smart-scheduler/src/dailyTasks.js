@@ -16,6 +16,8 @@ function DailyTasks(){
     const [open, setOpen]= useState(false);
     const [loading, setLoading]= useState(false);
 
+
+    // gets daily tasks
     useEffect(()=>{
         setLoading(true)
         Axios.post("http://localhost:30011/getDailyTasks", {userId: user.userId, todaysDate: date}).then((response)=>{
@@ -25,7 +27,7 @@ function DailyTasks(){
     }, [])
 
 
-    
+    // shows daily tasks
     return(
         <>
             {tasks.map((task, index)=>{
