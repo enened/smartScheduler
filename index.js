@@ -8,7 +8,8 @@ const session = require("express-session");
 const cookieParser = require('cookie-parser');
 const Gmail = require('node-gmail-api')
 const {Base64} = require('js-base64');
-
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 // database connection
 const db = mysql.createConnection({
@@ -21,7 +22,7 @@ const db = mysql.createConnection({
 
 // configure chatGPT API
 const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({apiKey: "",});
+const configuration = new Configuration({apiKey: "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",});
 const openai = new OpenAIApi(configuration);
 
 
@@ -32,9 +33,13 @@ app.use(express.json())
 app.use(cors({origin: ["http://localhost:3000"], methods: ["GET", "POST"], credentials: true}))
 app.use(session({key: "userLogin", secret: "isbf4t86r734hrf8i34r834h387yr843hr8343fghfdghcgffdusfsfsfsdfsdfsdppaspsap", resave: false, saveUninitialized: false, cookie: {expires: (60*60*24*60)}}))
 
+// get session if  exists
+app.get("/login", (req, res)=>{
+    res.send({user: req.session.user})
+})
 
 // login or sign up if no account
-app.post("/login", (req, res)=>{
+app.post("/googleLogin", (req, res)=>{
     const user = req.body.user;
 
     // check if account exists
@@ -49,14 +54,78 @@ app.post("/login", (req, res)=>{
                     if(err){console.log(err)}
                     
                     else{
+                        req.session.user = {userId: result.insertId, email: user.email};
                         res.send({user: {userId: result.insertId, email: user.email}})
                     }
                 })
             }
 
             else{
+                req.session.user = result[0];
                 res.send({user: result[0]})
             }
+        }
+    })
+})
+
+// login
+app.post("/login", (req, res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+
+    db.query("select email, password, userId from login where binary email = ? and password is not null", [email, password], (err, result) => {
+        if (result.length > 0){
+    
+          bcrypt.compare(password, result[0].password, (err, response)=>{
+            if (err){console.log(err)}
+      
+            if (response){
+      
+              req.session.user = result[0];
+              res.send({user: result[0]})
+            }
+      
+            else{
+              res.send("Wrong combo")
+            }
+          })
+        }
+    
+        else{
+          res.send("Wrong email")
+        }
+      })
+})
+
+// sign up if no account
+app.post("/signup", (req, res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
+
+    // check whether username already exists
+    db.query("select userId from login where binary email = ?", [email], (err, result)=>{
+        if (err){console.log(err)}
+
+        if (result.length == 0){
+
+            // encrypt password
+            bcrypt.hash(password, saltRounds, (err, hash)=>{
+
+                if (err){console.log(err)}
+
+                // add encrypted password to database
+                db.query("insert into login(email, password) values(?, ?)", [email, hash], (err, result)=>{
+                if (err){console.log(err)}
+
+                // create session for user and send userId
+                req.session.user = {userId: result.insertId, email: email};
+                res.send({user: {userId: result.insertId, email: email}})
+                })
+
+            })
+        }
+        else{
+            res.send("email in use")
         }
     })
 })
@@ -84,6 +153,10 @@ app.post("/getAllTasks", (req, res)=>{
                 res.send(result)
             }
 
+
+            res.send(result)
+
+
         }
     })
 })
@@ -110,6 +183,9 @@ app.post("/getDailyTasks", (req, res)=>{
             else{
                 res.send(result)
             }
+
+            res.send(result)
+
         }
     })
 })
@@ -148,12 +224,13 @@ app.post("/createNewTask", (req, res)=>{
     let date = req.body.date
     const task = req.body.task
     const taskDescription = req.body.taskDescription
+    const subtaskId = req.body.subtaskId
 
     if (!date.length){
         date = null
     }
 
-    db.query("insert into tasks(userId, date, task, taskDescription) values(?, ?, ?, ?)", [userId, date, task, taskDescription], (err, result)=>{
+    db.query("insert into tasks(userId, date, task, taskDescription, subtaskId) values(?, ?, ?, ?, ?)", [userId, date, task, taskDescription, subtaskId], (err, result)=>{
         if(err){console.log(err)}
 
         else{
@@ -201,6 +278,8 @@ app.post("/breakIntoSubtasks", (req, res)=>{
             }
 
             res.send(subtasks)
+
+            res.send([])
         }
     })
 })
@@ -224,7 +303,7 @@ app.post("/getSteps", async (req, res)=>{
 // generate tasks from user's gmail
 app.post("/mailTasker", async (req, res)=>{
     const gmail = new Gmail(req.body.accessToken)
-    const s = await gmail.messages('label:inbox', {max: 10},)
+    const s = await gmail.messages('label:inbox', {max: req.body.maxEmailNumber},)
     const userId = req.body.userId
     let tasks = []
 

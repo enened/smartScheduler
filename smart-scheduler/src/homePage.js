@@ -10,14 +10,22 @@ import MailTasker from "./mailTasker.js"
 function HomePage(){
     Axios.defaults.withCredentials = true;
     let navigate = useNavigate()
-    const {user, setUser, tokenClient, setTokenClient} = useContext(Context);
+    const {user, setUser} = useContext(Context);
     const [view, setView]= useState("daily tasks");
 
     
     useEffect(()=>{
-
         if (!user){
-            navigate("/")
+            Axios.get("http://localhost:30011/login").then((response)=>{
+                console.log(response)
+                if(response.data.user){
+                    setUser(response.data.user);
+                    navigate("/home")
+                }
+                else{
+                    navigate("/") 
+                }
+            })
         }
     }, [])
 
@@ -26,7 +34,7 @@ function HomePage(){
     return(
         <>
             <h1>SmartScheduler</h1>
-
+            
             {/* menu buttons */}
             <button style={view == "daily tasks" ? {"backgroundColor":"rgba(45,155,240,255)"} : {}} onClick={()=>{setView("daily tasks")}}>Daily Tasks</button>
             <button style={view == "all tasks" ? {"backgroundColor":"rgba(45,155,240,255)"} : {}} onClick={()=>{setView("all tasks")}}>All Tasks</button>

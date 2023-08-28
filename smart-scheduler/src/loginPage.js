@@ -9,9 +9,11 @@ function LoginPage(){
     Axios.defaults.withCredentials = true;
     let navigate = useNavigate()
     const {user, setUser} = useContext(Context);
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
 
     const handleCallbackResponse = (response)=>{
-        Axios.post("http://localhost:30011/login", {user: jwt_decode(response.credential)}).then((response2)=>{
+        Axios.post("http://localhost:30011/googleLogin", {user: jwt_decode(response.credential)}).then((response2)=>{
             setUser(response2.data.user)
             navigate("/home")
         })
@@ -35,11 +37,38 @@ function LoginPage(){
         
         google.accounts.id.prompt()
     }, [])
+
+    const login = (e) =>{
+        e.preventDefault();
+        Axios.post("http://localhost:30011/login", {email: email, password: password}).then((response) =>{
+
+            if (response.data == "Wrong combo"){
+                alert("Wrong username or password")
+            }
+            else if (response.data == "Wrong email"){
+                alert("No account with that email")
+            }
+            else{
+                setUser(response.data.user);
+                navigate("/home")
+            }
+        })
+    }
     
 
     return(
       <>  
         <h1>Smart scheduler</h1>
+        <p className='link' onClick={()=>{navigate("/signup")}}>Don't have an account? Signup!</p>
+        <form onSubmit={login} >
+                <input type = "text"  onChange={(e)=>{setEmail(e.target.value)}} required className = "loginInput" placeholder="Username"/>
+                <br/>
+                <input type = "password" onChange={(e)=>{setPassword(e.target.value)}} required className = "loginInput" placeholder="Password"/>
+                <br/>
+                
+                <button type = "submit">Login</button>
+            </form>
+
         <div className='flexCol'>
             <div id = "signInDiv"></div>
         </div>

@@ -6,8 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background: rgb(17,231,240);
-  background: linear-gradient(180deg, rgba(17,231,240,1)  0%,  rgb(0, 51, 146) 100%) fixed;
+  background: rgb(72, 237, 243);
+  background: linear-gradient(180deg, rgb(72, 237, 243)  0%,  rgb(3, 91, 255) 100%) fixed;
 }
 
 code {
@@ -50,10 +50,6 @@ input{
   width: 70%;
 }
 
-/* .inform{
-  color: gray;
-} */
-
 
 .taskSlide{
   background-color: rgba(65,75,178,255);
@@ -93,7 +89,7 @@ input{
 }
 
 .reviewTask{
-  background-color: rgba(45,155,240,255);
+  background-color: rgb(65,75,178);
   color: white;
   padding: 15px;
   margin: 10px;
@@ -102,7 +98,7 @@ input{
 }
 
 .subtaskSlide{
-  background-color: rgba(65,75,178,255);
+  background-color: rgb(65,75,178);
   color: white;
   width: 40%;
   height: fit-content;
@@ -110,6 +106,32 @@ input{
   margin-top: 20px;
   display: flex;
   border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.loginInput{
+  width: 80%;
+  max-width: 500px;
+  text-align: center !important;
+}
+
+.link{
+  color: blue;
+  text-decoration: underline;
+}
+
+.reviewSubTaskSlide{
+  background-color: rgb(65,75,178);
+  color: white;
+  width: 90%;
+  height: fit-content;
+  min-width: fit-content;
+  margin: auto;
+  margin-top: 50px;
   display: flex;
   justify-content: space-between;
   align-content: center;

@@ -9,6 +9,7 @@ function MailTasker(){
     const {user, setUser, tokenClient, setTokenClient} = useContext(Context);
     const [loading, setLoading]= useState(false);
     const [doneText, setDoneText]= useState("");
+    const [maxEmailNumber, setMaxEmailNumber]= useState(10);
 
 
     // choose account for scanning gmail
@@ -21,10 +22,12 @@ function MailTasker(){
                 client_id: "166074828687-prontca2mjfsuajnmv7mp6pl6crte0v9.apps.googleusercontent.com",
                 scope: "https://www.googleapis.com/auth/gmail.readonly",
                 callback: (tokenResponse) =>{
-                    Axios.post("http://localhost:30011/mailTasker", {accessToken: tokenResponse.access_token, userId: user.userId}).then((response2)=>{
-                        setLoading(false)
-                        setDoneText(`${response2.data.length} task(s) added to through mail`)
-                    })
+                    setMaxEmailNumber((maxEmailNumber)=>{
+                        Axios.post("http://localhost:30011/mailTasker", {accessToken: tokenResponse.access_token, userId: user.userId, maxEmailNumber: maxEmailNumber}).then((response2)=>{
+                            setLoading(false)
+                            setDoneText(`${response2.data.length} task(s) added to through mail`)
+                        })
+                    })   
                 }
             })
         )
@@ -34,13 +37,18 @@ function MailTasker(){
         }
     }, [])
 
-    
     // show scan email buttons
     return(
         <>
-            <p>Automatically create tasks from your gmail!</p>
-            {loading && <p>Loading...</p>}
-            <button onClick={()=>{tokenClient.requestAccessToken(); setLoading(true)}}>Scan Gmail for tasks</button>
+            <form onSubmit={(e)=>{e.preventDefault(); tokenClient.requestAccessToken(); setLoading(true)}}>
+                <p>Number of emails to scan:</p>
+                <input type='number'className='loginInput' step={1} required onChange={(e)=>{setMaxEmailNumber(e.target.value)}}/>
+                <br/>
+                {loading && <p>Loading...</p>}
+                {doneText}
+                <button type='submit'>Scan Gmail for tasks</button>
+            </form>
+            
 
         </>
     )
