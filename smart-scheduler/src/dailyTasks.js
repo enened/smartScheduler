@@ -1,4 +1,3 @@
-import {useNavigate} from 'react-router-dom';
 import { useState,useContext,  useEffect} from 'react';
 import {Context} from "./context.js";
 import  Axios  from 'axios';
@@ -10,8 +9,7 @@ const date = new Date();
 
 function DailyTasks(){
     Axios.defaults.withCredentials = true;
-    let navigate = useNavigate()
-    const {user, setUser} = useContext(Context);
+    const {user} = useContext(Context);
     const [tasks, setTasks]= useState([]);
     const [open, setOpen]= useState(false);
     const [loading, setLoading]= useState(false);

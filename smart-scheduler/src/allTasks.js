@@ -1,4 +1,3 @@
-import {useNavigate} from 'react-router-dom';
 import { useState,useContext,  useEffect} from 'react';
 import {Context} from "./context.js";
 import  Axios  from 'axios';
@@ -8,8 +7,7 @@ import Task from './task.js';
 
 function AllTasks(){
     Axios.defaults.withCredentials = true;
-    let navigate = useNavigate()
-    const {user, setUser} = useContext(Context);
+    const {user} = useContext(Context);
     const [tasks, setTasks]= useState([]);
     const [open, setOpen]= useState(false);
     const [loading, setLoading]= useState(false);

@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 
 function SignupPage(){
     let navigate = useNavigate()
-    const {setLoggedIn, setUser} = useContext(Context);
+    const {setUser} = useContext(Context);
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
 
@@ -23,7 +23,7 @@ function SignupPage(){
         const google = window.google;
 
         google.accounts.id.initialize({
-        client_id: "166074828687-prontca2mjfsuajnmv7mp6pl6crte0v9.apps.googleusercontent.com",
+        client_id: process.env.REACT_APP_CLIENT_ID,
         callback: handleCallbackResponse
         });
     

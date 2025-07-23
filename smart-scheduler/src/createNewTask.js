@@ -1,12 +1,11 @@
-import {useNavigate} from 'react-router-dom';
-import { useState,useContext,  useEffect} from 'react';
-import {Context} from "./context.js";
+import { useState, useContext } from 'react';
+import { Context } from "./context.js";
 import  Axios  from 'axios';
 
 
 
 function CreateNewTask({setOpen, setTasks, daily}){
-    const {user, setUser} = useContext(Context);
+    const {user} = useContext(Context);
     const [task, setTask]= useState("");
     const [taskDescription, setTaskDescription]= useState("");
     const [date, setDate]= useState("");

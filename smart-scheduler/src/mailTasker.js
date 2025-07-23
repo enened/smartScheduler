@@ -19,7 +19,7 @@ function MailTasker(){
 
         setTokenClient(
             google.accounts.oauth2.initTokenClient({
-                client_id: "166074828687-prontca2mjfsuajnmv7mp6pl6crte0v9.apps.googleusercontent.com",
+                client_id: process.env.REACT_APP_CLIENT_ID,
                 scope: "https://www.googleapis.com/auth/gmail.readonly",
                 callback: (tokenResponse) =>{
                     setMaxEmailNumber((maxEmailNumber)=>{
