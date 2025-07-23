@@ -10,19 +10,20 @@ const Gmail = require('node-gmail-api')
 const {Base64} = require('js-base64');
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+require('dotenv').config()
 
 // database connection
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: 'smart_scheduler'
 });
 
 
 // configure chatGPT API
 const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({apiKey: "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",});
+const configuration = new Configuration({apiKey: process.env.API_KEY,});
 const openai = new OpenAIApi(configuration);
 
 
